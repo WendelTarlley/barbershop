@@ -11,17 +11,5 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    depends_on:
-      - db
-    environment:
-      DATABASE_URL: postgres://user_barber:password_barber@db:5432/barbershop_db
-
 volumes:
   pgdata:

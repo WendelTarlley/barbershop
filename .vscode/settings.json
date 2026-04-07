@@ -10,5 +10,6 @@
             "database": "barbershop_db",
             "username": "user_barber"
         }
-    ]
+    ],
+    "postman.settings.dotenv-detection-notification-visibility": false
 }

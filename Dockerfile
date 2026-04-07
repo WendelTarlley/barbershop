@@ -13,5 +13,9 @@ RUN npm install
 # Copia o restante dos arquivos do seu projeto
 COPY . .
 
+COPY prisma ./prisma/
+RUN npx prisma generate
+
 # Comando para rodar o NestJS em modo de desenvolvimento
 CMD ["npm", "run", "start:dev"]
+
