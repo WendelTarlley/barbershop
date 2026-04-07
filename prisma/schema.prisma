@@ -1,0 +1,151 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Barbershop {
+  id         String   @id @default(uuid())
+  name       String
+  document       String   @unique
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  barbers      Barber[]
+  services     Service[]
+  appointments Appointment[]
+
+  @@map("barbershop")
+}
+
+model Barber {
+  id           String   @id @default(uuid())
+  name         String
+  cpf          String   @unique
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  
+  barbershopId String   @map("barbershop_id")
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+
+  services      BarberService[]
+  availabilities Availability[]
+  blocks        Block[]
+  appointments  Appointment[]
+  reservations  Reservation[]
+
+  @@map("barber")
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String
+  email     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  appointments Appointment[]
+
+  @@map("client")
+}
+
+model Service {
+  id              String   @id @default(uuid())
+  name            String
+  durationMinutes Int      @map("duration_minutes")
+  price           Decimal  @db.Decimal(10, 2)
+
+  barbershopId String     @map("barbershop_id")
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+
+  barberServices      BarberService[]
+  appointmentServices AppointmentService[]
+
+  @@map("service")
+}
+
+model BarberService {
+  id        String @id @default(uuid())
+  barberId  String @map("barber_id")
+  serviceId String @map("service_id")
+
+  barber  Barber  @relation(fields: [barberId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+
+  @@map("barber_service")
+}
+
+model Availability {
+  id        String @id @default(uuid())
+  dayOfWeek Int    @map("day_of_week") // 0=domingo
+  startTime String @map("start_time")  // "09:00"
+  endTime   String @map("end_time")    // "18:00"
+
+  barberId String @map("barber_id")
+  barber   Barber @relation(fields: [barberId], references: [id])
+
+  @@map("availability")
+}
+
+model Block {
+  id            String   @id @default(uuid())
+  startDatetime DateTime @map("start_datetime")
+  endDatetime   DateTime @map("end_datetime")
+  reason        String
+
+  barberId String @map("barber_id")
+  barber   Barber @relation(fields: [barberId], references: [id])
+
+  @@map("block")
+}
+
+model Appointment {
+  id            String   @id @default(uuid())
+  startDatetime DateTime @map("start_datetime")
+  endDatetime   DateTime @map("end_datetime")
+  status        String   // SCHEDULED, CANCELED
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  barbershopId String @map("barbershop_id")
+  barberId     String @map("barber_id")
+  clientId     String @map("client_id")
+
+  barbershop Barbershop @relation(fields: [barbershopId], references: [id])
+  barber     Barber     @relation(fields: [barberId], references: [id])
+  client     Client     @relation(fields: [clientId], references: [id])
+
+  services AppointmentService[]
+
+  @@map("appointment")
+}
+
+model AppointmentService {
+  id            String @id @default(uuid())
+  appointmentId String @map("appointment_id")
+  serviceId     String @map("service_id")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  service     Service     @relation(fields: [serviceId], references: [id])
+
+  @@map("appointment_service")
+}
+
+model Reservation {
+  id            String   @id @default(uuid())
+  startDatetime DateTime @map("start_datetime")
+  endDatetime   DateTime @map("end_datetime")
+  expiresAt     DateTime @map("expires_at")
+  status        String   // ACTIVE, EXPIRED, CONFIRMED
+
+  barberId String @map("barber_id")
+  barber   Barber @relation(fields: [barberId], references: [id])
+
+  @@map("reservation")
+}
