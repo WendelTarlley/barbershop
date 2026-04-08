@@ -17,7 +17,7 @@ export class BarbershopService {
 
     findOne(id: string) {
       const barbershop = this.prismaService.barbershop.findUnique({ where: { id },
-        include: {barbers: true} });
+        include: {barbers: true,barbershopServices: true} });
 
         if (!barbershop) {
             throw new NotFoundException('Barbershop not found');
@@ -36,7 +36,7 @@ export class BarbershopService {
             },
             include: {
                 barbers: true,
-                services: true
+                barbershopServices: true
             }
         });
     }

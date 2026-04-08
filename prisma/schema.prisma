@@ -14,7 +14,7 @@ model Barbershop {
   createdAt    DateTime      @default(now()) @map("created_at")
   appointments Appointment[]
   barbers      Barber[]
-  services     Service[]
+  barbershopServices     BarbershopService[]
 
   @@map("barbershop")
 }
@@ -29,7 +29,7 @@ model Barber {
   appointments   Appointment[]
   availabilities Availability[]
   barbershop     Barbershop      @relation(fields: [barbershopId], references: [id])
-  services       BarberService[]
+  barbershopServices       BarberService[]
   blocks         Block[]
   reservations   Reservation[]
 
@@ -47,7 +47,7 @@ model Client {
   @@map("client")
 }
 
-model Service {
+model BarbershopService {
   id                  String               @id @default(uuid())
   name                String
   durationMinutes     Int                  @map("duration_minutes")
@@ -57,15 +57,15 @@ model Service {
   barberServices      BarberService[]
   barbershop          Barbershop           @relation(fields: [barbershopId], references: [id])
 
-  @@map("service")
+  @@map("barbershop_service")
 }
 
 model BarberService {
   id        String  @id @default(uuid())
   barberId  String  @map("barber_id")
-  serviceId String  @map("service_id")
+  barbershopServiceId String  @map("barbershop_service_id")
   barber    Barber  @relation(fields: [barberId], references: [id])
-  service   Service @relation(fields: [serviceId], references: [id])
+  barbershopService   BarbershopService @relation(fields: [barbershopServiceId], references: [id])
 
   @@map("barber_service")
 }
@@ -112,9 +112,9 @@ model Appointment {
 model AppointmentService {
   id            String      @id @default(uuid())
   appointmentId String      @map("appointment_id")
-  serviceId     String      @map("service_id")
+  barbershopServiceId     String      @map("barbershop_service_id")
   appointment   Appointment @relation(fields: [appointmentId], references: [id])
-  service       Service     @relation(fields: [serviceId], references: [id])
+  barbershopServices       BarbershopService     @relation(fields: [barbershopServiceId], references: [id])
 
   @@map("appointment_service")
 }
