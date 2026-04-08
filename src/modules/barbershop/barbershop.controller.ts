@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { BarbershopService } from './barbershop.service';
+import { CreateBarbershopDto } from './dto/create-barbershop.dto';
 
 @Controller('barbershops')
 export class BarbershopController {
@@ -11,7 +12,7 @@ export class BarbershopController {
     }
 
     @Post()
-    create(@Body() data: any) {
+    create(@Body() data: CreateBarbershopDto) {
         return this.barbershopService.create(data);
     }
 }
