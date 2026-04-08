@@ -13,4 +13,15 @@ export class BarbershopService {
             data
         });
     }
+
+    async getBarbershopByName(barbershopName: string) {
+        return this.prismaService.barbershop.findMany({
+            where: {
+                name: {
+                    contains: barbershopName,
+                    mode: 'insensitive'
+                }
+            }
+        });
+    }
 }
