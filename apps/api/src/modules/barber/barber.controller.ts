@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BarberService } from './barber.service';
-import { CreateBarberDto } from './dto/create-barber.dto';
+import { CreateBarberDto } from '@barbershop/shared';
 import { UpdateBarberDto } from './dto/update-barber.dto';
 
 @Controller('barber')
