@@ -20,4 +20,9 @@ export class BarbershopController {
     findOne(@Query('barbershopName') barbershopName: string) {
         return this.barbershopService.getBarbershopByName(barbershopName);
     }
+
+    @Get(':id')
+    findById(@Param('id') id: string) {
+        return this.barbershopService.findOne(id);
+    }
 }

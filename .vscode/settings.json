@@ -8,7 +8,8 @@
             "driver": "PostgreSQL",
             "name": "Barbershop",
             "database": "barbershop_db",
-            "username": "user_barber"
+            "username": "user_barber",
+            "password": "password_barber"
         }
     ],
     "postman.settings.dotenv-detection-notification-visibility": false
