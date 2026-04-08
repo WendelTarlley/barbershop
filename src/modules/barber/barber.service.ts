@@ -20,7 +20,7 @@ export class BarberService {
     return this.prismaService.barber.findMany();
   }
 
-  f  async findOne(id: string) {
+  async findOne(id: string) {
     const barber = await this.prismaService.barber.findUnique({ where: { id } });
 
     if (!barber) {
